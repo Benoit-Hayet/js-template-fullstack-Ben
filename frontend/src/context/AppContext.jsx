@@ -23,8 +23,10 @@ function AppContextProvider({ children }) {
     );
 
     if (!memoryUser) {
+      // eslint-disable-next-line no-alert
       alert("Identifiants incorrects !");
     } else {
+      // eslint-disable-next-line no-alert
       alert(`Content de vous revoir ${credentials.email}`);
       setUser(memoryUser);
 
@@ -41,8 +43,10 @@ function AppContextProvider({ children }) {
     if (!users.find((userdb) => userdb.email === newUser.email)) {
       users.push(newUser);
       localStorage.setItem("users", JSON.stringify(users));
+      // eslint-disable-next-line no-alert
       alert(`Bienvenue ${newUser.email}`);
     } else {
+      // eslint-disable-next-line no-alert
       alert("Vous êtes déjà inscrit !");
     }
   };

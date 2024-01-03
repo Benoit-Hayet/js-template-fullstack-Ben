@@ -1,6 +1,5 @@
-const AbstractManager = require("./AbstractManager");
-
 const bcrypt = require("bcrypt");
+const AbstractManager = require("./AbstractManager");
 
 class UserManager extends AbstractManager {
   constructor() {
@@ -9,7 +8,6 @@ class UserManager extends AbstractManager {
 
   create(user) {
     return this.hashPassword(user.password).then((hash) => {
-      console.log(hash);
       return this.database.query(
         `insert into ${this.table} (email, password, is_admin) values (?, ?, ?)`,
         [user.email, hash, user.is_admin]
@@ -42,7 +40,7 @@ class UserManager extends AbstractManager {
   //   );
   // }
 
-  hashPassword(password, workFactor = 5) {
+  static hashPassword(password, workFactor = 5) {
     return bcrypt.hash(password, workFactor);
   }
 }

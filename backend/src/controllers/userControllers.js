@@ -1,4 +1,9 @@
+const jwt = require("jsonwebtoken");
 const models = require("../models");
+
+function generateAccessToken(data) {
+  return jwt.sign(data, process.env.APP_SECRET, { expiresIn: "1800s" });
+}
 
 const getUsers = (_, res) => {
   models.user
@@ -15,7 +20,9 @@ const getUsers = (_, res) => {
 const postLogin = (req, res) => {
   models.user.login(req.body).then((user) => {
     if (user) {
-      res.send(user);
+      // todo : filtrer les données à envoyer
+      const token = generateAccessToken(user);
+      res.send({ token });
     } else {
       res.status(401).send({ error: "Identifiant incorrect!!!" });
     }
