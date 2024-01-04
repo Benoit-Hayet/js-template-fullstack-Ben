@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const app = require("./src/app");
+app.use(require("cors"));
 
 const port = parseInt(process.env.APP_PORT ?? "6000", 10);
 

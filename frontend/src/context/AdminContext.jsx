@@ -7,9 +7,9 @@ const adminContext = createContext();
 
 function AdminContextProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(true);
-  const appContext = useAppDemo();
+  const { user } = useAppDemo();
 
-  if (appContext.user.admin === false) {
+  if (user.is_admin !== 1) {
     return <Navigate to="/demo" />;
   }
 

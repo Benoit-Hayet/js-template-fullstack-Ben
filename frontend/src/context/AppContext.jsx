@@ -1,7 +1,10 @@
+/* eslint-disable no-alert */
 import { createContext, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { MDBAlert } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const appContext = createContext();
 
@@ -10,45 +13,47 @@ function AppContextProvider({ children }) {
   const [user, setUser] = useState({ admin: false });
   const [basicDanger, setBasicDanger] = useState(false);
   const navigate = useNavigate();
-  const getUsers = () => JSON.parse(localStorage.getItem("users") ?? "[]");
 
-  const login = (credentials) => {
-    // setUser({ admin: true });
-    const users = getUsers();
-
-    const memoryUser = users.find(
-      (userdb) =>
-        userdb.email === credentials.email &&
-        userdb.password === credentials.password
-    );
-
-    if (!memoryUser) {
-      // eslint-disable-next-line no-alert
-      alert("Identifiants incorrects !");
-    } else {
-      // eslint-disable-next-line no-alert
+  const login = async (credentials) => {
+    try {
+      const { data } = await axios.post(
+        `http://localhost:3310/login`,
+        credentials
+      );
+      localStorage.setItem("token", data.token);
+      const tokenData = jwtDecode(data.token);
       alert(`Content de vous revoir ${credentials.email}`);
-      setUser(memoryUser);
-
-      if (memoryUser.admin) {
+      setUser(tokenData);
+      if (tokenData.is_admin === 1) {
         return navigate("/admin/demo");
       }
+      return navigate("/demo");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
     }
-    return navigate("/demo");
+
+    return null;
   };
 
-  const register = (newUser) => {
-    const users = getUsers();
-
-    if (!users.find((userdb) => userdb.email === newUser.email)) {
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
-      // eslint-disable-next-line no-alert
+  const register = async (newUser) => {
+    try {
+      setUser(await axios.post("http://localhost:3310/users", newUser));
       alert(`Bienvenue ${newUser.email}`);
-    } else {
-      // eslint-disable-next-line no-alert
-      alert("Vous êtes déjà inscrit !");
+    } catch (err) {
+      alert(err.message);
     }
+    // const users = getUsers();
+
+    // if (!users.find((userdb) => userdb.email === newUser.email)) {
+    //   users.push(newUser);
+    //   localStorage.setItem("users", JSON.stringify(users));
+    //   // eslint-disable-next-line no-alert
+    //   alert(`Bienvenue ${newUser.email}`);
+    // } else {
+    //   // eslint-disable-next-line no-alert
+    //   alert("Vous êtes déjà inscrit !");
+    // }
   };
 
   const logout = () => {

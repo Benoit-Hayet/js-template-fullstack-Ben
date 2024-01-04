@@ -6,7 +6,7 @@ function Register() {
   const [formValue, setFormValue] = useState({
     email: "elea@gmail.com",
     password: "1234",
-    admin: false,
+    is_admin: false,
   });
 
   const { register } = useAppDemo();
@@ -38,7 +38,9 @@ function Register() {
       <MDBSwitch
         id="flexSwitchCheckDefault"
         label="Admin"
-        onClick={() => setFormValue({ ...formValue, admin: !formValue.admin })}
+        onClick={() =>
+          setFormValue({ ...formValue, is_admin: !formValue.admin })
+        }
       />
 
       <MDBBtn onClick={() => register(formValue)}>Connexion</MDBBtn>
