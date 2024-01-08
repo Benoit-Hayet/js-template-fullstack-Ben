@@ -30,4 +30,12 @@ const authMiddleware = (req, res, next) => {
   );
 };
 
-module.exports = { authMiddleware };
+const authAdminMiddleware = (req, res, next) => {
+  if (req?.user?.isAdmin !== 1) {
+    return res.status(403).json({ error: "t'es pas le boss" });
+  }
+
+  return next();
+};
+
+module.exports = { authMiddleware, authAdminMiddleware };
