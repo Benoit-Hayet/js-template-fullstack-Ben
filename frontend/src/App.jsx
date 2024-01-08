@@ -3,7 +3,7 @@ import "./App.css";
 import { useAppDemo } from "./context/AppContext";
 
 function App() {
-  const { user } = useAppDemo();
+  const { user, logout } = useAppDemo();
 
   return (
     <div className="container mt-5">
@@ -13,6 +13,9 @@ function App() {
       <Link to="/login">Login</Link>
       <Link to="/register">Register</Link>
       <Link to="/admin/demo">Admin</Link>
+      <button type="button" onClick={logout}>
+        logout
+      </button>
     </div>
   );
 }

@@ -12,12 +12,15 @@ import Admin from "./components/Admin";
 import AdminDemo from "./components/AdminDemo";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import ApiService from "./services/api.service";
+
+const apiService = new ApiService();
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AppContextProvider>
+      <AppContextProvider apiService={apiService}>
         <App />
       </AppContextProvider>
     ),

@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import { MDBAlert } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ApiService from "../services/api.service";
 
 const appContext = createContext();
 
-function AppContextProvider({ children }) {
+function AppContextProvider({ children, apiService }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState({ admin: false });
   const [basicDanger, setBasicDanger] = useState(false);
@@ -20,10 +21,13 @@ function AppContextProvider({ children }) {
         credentials
       );
       localStorage.setItem("token", data.token);
-      const config = {
-        headers: { Authorization: `Bearer ${data.token}` },
-      };
-      const result = await axios.get("http://localhost:3310/users/me", config);
+      // const config = {
+      //   headers: { Authorization: `Bearer ${data.token}` },
+      // };
+      // apiService.setToken(data.token);
+      // console.log(apiService.getToken());
+      const result = await apiService.get("http://localhost:3310/users/me");
+      // const result = await axios.get("http://localhost:3310/users/me", config);
       alert(`Content de vous revoir ${result.data.email}`);
       setUser(result.data);
       if (result.data.isAdmin === 1) {
@@ -45,28 +49,19 @@ function AppContextProvider({ children }) {
     } catch (err) {
       alert(err.message);
     }
-    // const users = getUsers();
-
-    // if (!users.find((userdb) => userdb.email === newUser.email)) {
-    //   users.push(newUser);
-    //   localStorage.setItem("users", JSON.stringify(users));
-    //   // eslint-disable-next-line no-alert
-    //   alert(`Bienvenue ${newUser.email}`);
-    // } else {
-    //   // eslint-disable-next-line no-alert
-    //   alert("Vous êtes déjà inscrit !");
-    // }
   };
 
   const logout = () => {
     setUser({ admin: false });
+    setIsAdmin(false);
+    localStorage.clear();
   };
 
   // exemple méthodes pour communiquer avec une api
 
   const contextData = useMemo(
-    () => ({ isAdmin, setIsAdmin, user, login, logout, register }),
-    [isAdmin, setIsAdmin, user, login, logout, register]
+    () => ({ isAdmin, setIsAdmin, user, login, logout, register, apiService }),
+    [isAdmin, setIsAdmin, user, login, logout, register, apiService]
   );
 
   return (
@@ -89,6 +84,7 @@ function AppContextProvider({ children }) {
 
 AppContextProvider.propTypes = {
   children: PropTypes.string.isRequired,
+  apiService: PropTypes.instanceOf(ApiService).isRequired,
 };
 
 export default AppContextProvider;
