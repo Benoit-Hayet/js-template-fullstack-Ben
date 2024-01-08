@@ -20,8 +20,7 @@ const getUsers = (_, res) => {
 const postLogin = (req, res) => {
   models.user.login(req.body).then((user) => {
     if (user) {
-      // todo : filtrer les données à envoyer
-      const token = generateAccessToken(user);
+      const token = generateAccessToken({ id: user.id });
       res.send({ token });
     } else {
       res.status(401).send({ error: "Identifiant incorrect!!!" });
@@ -46,8 +45,13 @@ const postUser = (req, res) => {
   // res.status(418).send(req.body)
 };
 
+const getProfile = (req, res) => {
+  res.send(req.user);
+};
+
 module.exports = {
   getUsers,
   postUser,
   postLogin,
+  getProfile,
 };
