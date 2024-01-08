@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { MDBAlert } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 
 const appContext = createContext();
 
@@ -21,10 +20,13 @@ function AppContextProvider({ children }) {
         credentials
       );
       localStorage.setItem("token", data.token);
-      const tokenData = jwtDecode(data.token);
-      alert(`Content de vous revoir ${credentials.email}`);
-      setUser(tokenData);
-      if (tokenData.is_admin === 1) {
+      const config = {
+        headers: { Authorization: `Bearer ${data.token}` },
+      };
+      const result = await axios.get("http://localhost:3310/users/me", config);
+      alert(`Content de vous revoir ${result.data.email}`);
+      setUser(result.data);
+      if (result.data.isAdmin === 1) {
         return navigate("/admin/demo");
       }
       return navigate("/demo");

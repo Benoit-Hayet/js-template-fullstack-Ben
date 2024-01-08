@@ -9,7 +9,7 @@ function AdminContextProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(true);
   const { user } = useAppDemo();
 
-  if (user.is_admin !== 1) {
+  if (user.isAdmin !== 1) {
     return <Navigate to="/demo" />;
   }
 
