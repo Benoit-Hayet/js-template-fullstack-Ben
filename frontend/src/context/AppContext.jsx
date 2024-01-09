@@ -1,33 +1,32 @@
 /* eslint-disable no-alert */
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { MDBAlert } from "mdb-react-ui-kit";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ApiService from "../services/api.service";
 
 const appContext = createContext();
 
 function AppContextProvider({ children, apiService }) {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [user, setUser] = useState({ admin: false });
+  const givenData = useLoaderData();
+  const [isAdmin, setIsAdmin] = useState(givenData?.preloadUser?.data?.isAdmin);
+  const [user, setUser] = useState(givenData?.preloadUser?.data);
   const [basicDanger, setBasicDanger] = useState(false);
   const navigate = useNavigate();
 
   const login = async (credentials) => {
     try {
-      const { data } = await axios.post(
+      const data = await apiService.post(
         `http://localhost:3310/login`,
         credentials
       );
       localStorage.setItem("token", data.token);
-      // const config = {
-      //   headers: { Authorization: `Bearer ${data.token}` },
-      // };
-      // apiService.setToken(data.token);
-      // console.log(apiService.getToken());
+
+      apiService.setToken(data.token);
+
       const result = await apiService.get("http://localhost:3310/users/me");
-      // const result = await axios.get("http://localhost:3310/users/me", config);
+
       alert(`Content de vous revoir ${result.data.email}`);
       setUser(result.data);
       if (result.data.isAdmin === 1) {
@@ -52,9 +51,10 @@ function AppContextProvider({ children, apiService }) {
   };
 
   const logout = () => {
-    setUser({ admin: false });
+    setUser(undefined);
     setIsAdmin(false);
     localStorage.clear();
+    return navigate("/demo");
   };
 
   // exemple méthodes pour communiquer avec une api
@@ -63,7 +63,13 @@ function AppContextProvider({ children, apiService }) {
     () => ({ isAdmin, setIsAdmin, user, login, logout, register, apiService }),
     [isAdmin, setIsAdmin, user, login, logout, register, apiService]
   );
+  useEffect(() => {
+    if (isAdmin) {
+      return navigate("/admin/demo");
+    }
 
+    return null;
+  }, []);
   return (
     <appContext.Provider value={contextData}>
       {children}
@@ -83,7 +89,7 @@ function AppContextProvider({ children, apiService }) {
 }
 
 AppContextProvider.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   apiService: PropTypes.instanceOf(ApiService).isRequired,
 };
 

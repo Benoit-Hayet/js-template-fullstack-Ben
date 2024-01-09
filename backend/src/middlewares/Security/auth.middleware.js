@@ -9,6 +9,10 @@ const authMiddleware = (req, res, next) => {
 
   // Step 2: verify token then set user data in req
   return jwt.verify(
+    /**
+     * On reçoit "bearer xxx...", nous voulons seulement récupérer le token
+     * grâce au split(" ")[1]
+     */
     req.headers.authorization.split(" ")[1],
     process.env.APP_SECRET,
     (err, data) => {

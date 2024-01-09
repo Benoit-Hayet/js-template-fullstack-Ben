@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useAppDemo } from "./AppContext";
@@ -6,8 +6,7 @@ import { useAppDemo } from "./AppContext";
 const adminContext = createContext();
 
 function AdminContextProvider({ children }) {
-  const [isAdmin, setIsAdmin] = useState(true);
-  const { user } = useAppDemo();
+  const { user, isAdmin, setIsAdmin } = useAppDemo();
 
   if (user.isAdmin !== 1) {
     return <Navigate to="/demo" />;
@@ -26,7 +25,7 @@ function AdminContextProvider({ children }) {
 }
 
 AdminContextProvider.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default AdminContextProvider;

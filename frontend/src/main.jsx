@@ -19,6 +19,15 @@ const apiService = new ApiService();
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: async () => {
+      try {
+        const data = await apiService.get("http://localhost:3310/users/me");
+        return { preloadUser: data ?? null };
+      } catch (err) {
+        console.error(err.message);
+        return null;
+      }
+    },
     element: (
       <AppContextProvider apiService={apiService}>
         <App />
