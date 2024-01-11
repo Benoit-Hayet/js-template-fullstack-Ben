@@ -68,7 +68,7 @@ function AppContextProvider({ children, apiService }) {
       return navigate("/admin/demo");
     }
 
-    return null;
+    return navigate("/demo");
   }, []);
   return (
     <appContext.Provider value={contextData}>

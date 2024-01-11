@@ -49,9 +49,23 @@ const getProfile = (req, res) => {
   res.send(req.user);
 };
 
+const getUser = async (req, res) => {
+  const id = +req.params.id;
+  try {
+    const [result] = await models.user.find(id);
+    if (!result.length) {
+      return res.status(404).send({ error: "User not found" });
+    }
+    return res.send(result[0]);
+  } catch (error) {
+    return res.status(422).send({ error: error.message });
+  }
+};
+
 module.exports = {
   getUsers,
   postUser,
   postLogin,
   getProfile,
+  getUser,
 };
