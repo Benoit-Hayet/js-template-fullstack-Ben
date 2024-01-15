@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import "mdb-react-ui-kit/dist/css/mdb.dark.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "mdb-react-multi-carousel/dist/css/multi-carousel.min.css";
 import AppContextProvider from "./context/AppContext";

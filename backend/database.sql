@@ -20,3 +20,12 @@ DROP TABLE IF EXISTS user;
 );
 
 INSERT INTO user (email,password,is_admin) VALUES ('user@demo.com','1234',0),('admin@demo.com', '1234',1);
+
+ CREATE TABLE upload ( 
+  id int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  url varchar(255) NOT NULL,
+  unique(url),
+  created_at timestamp default CURRENT_TIMESTAMP
+);
+
+ALTER TABLE user ADD COLUMN avatar int(11), ADD CONSTRAINT fk_avatar_upload_id FOREIGN KEY (avatar) REFERENCES upload(id);

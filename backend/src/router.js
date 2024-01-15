@@ -1,6 +1,11 @@
 const express = require("express");
+const multer = require("multer");
+
+const upload = multer({ dest: "public/uploads/" });
 
 const router = express.Router();
+
+const uploadController = require("./controllers/upload.controller");
 
 const validateUser = require("./middlewares/validateUser.middlewares");
 const userControllers = require("./controllers/userControllers");
@@ -28,5 +33,21 @@ router.get(
 router.get("/users/me", authMiddleware, userControllers.getProfile);
 router.post("/users", validateUser, userControllers.postUser);
 router.post("/login", userControllers.postLogin);
+
+// UPLOADS
+
+router.get(
+  "/uploads",
+  authMiddleware,
+  authAdminMiddleware,
+  uploadController.getList
+);
+
+router.post(
+  "/uploads",
+  authMiddleware,
+  upload.single("avatar"),
+  uploadController.create
+);
 
 module.exports = router;

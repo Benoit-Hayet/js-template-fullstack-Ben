@@ -47,6 +47,13 @@ class UserManager extends AbstractManager {
     );
   }
 
+  addAvatar(userId, avatarId) {
+    return this.database.query(
+      `UPDATE ${this.table} SET avatar = ? WHERE id = ?`,
+      [avatarId, userId]
+    );
+  }
+
   static hashPassword(password, workFactor = 5) {
     return bcrypt.hash(password, workFactor);
   }
