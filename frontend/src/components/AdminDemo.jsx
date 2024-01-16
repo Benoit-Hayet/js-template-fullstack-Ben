@@ -1,7 +1,15 @@
 import { MDBChart } from "mdb-react-ui-kit";
 
 export default function AdminDemo() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
   return (
+    <>
+      <form className="d-flex flex-column mb-5" onSubmit={handleSubmit}>
+        <input type="file" accept="image/*" />
+        <button type="submit">Envoyer le média</button>
+      </form>
     <MDBChart
       type="bar"
       data={{
@@ -37,5 +45,6 @@ export default function AdminDemo() {
         ],
       }}
     />
+    </>
   );
 }

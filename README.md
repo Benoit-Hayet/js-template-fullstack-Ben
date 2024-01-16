@@ -51,3 +51,12 @@ For deployment, you have to go to `secrets` → app `actions` on the github repo
 - CAPROVER_FRONT_APPNAME : name app on caprover
 - CAPROVER_PASSWORD : password caprover
 - CAPROVER_SERVER : link of domain
+
+#16/01/2024
+
+### création du formulaire [ici]("./frontend/src/components/AdminDemo.jsx")
+
+- création du formulaire de la balise form.
+- rajouter un noeud un input de type file qui accepte uniquement les images.
+- rajouter un bouton submit.
+- ajouter la méthode handleSubmit (preventDefault()).
