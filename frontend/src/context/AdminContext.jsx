@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext } from "react";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useAppDemo } from "./AppContext";
@@ -6,21 +6,14 @@ import { useAppDemo } from "./AppContext";
 const adminContext = createContext();
 
 function AdminContextProvider({ children }) {
-  const { user, isAdmin, setIsAdmin } = useAppDemo();
-
-  if (user.isAdmin !== 1) {
-    return <Navigate to="/demo" />;
-  }
-
-  const adminData = useMemo(
-    () => ({ isAdmin, setIsAdmin }),
-    [isAdmin, setIsAdmin]
-  );
+  const { isAdmin } = useAppDemo();
 
   // méthodes supplémentaires pour protéger des routes liées à l'administrateur
 
-  return (
-    <adminContext.Provider value={adminData}>{children}</adminContext.Provider>
+  return isAdmin ? (
+    <adminContext.Provider value={isAdmin}>{children}</adminContext.Provider>
+  ) : (
+    <Navigate to="/demo" />
   );
 }
 

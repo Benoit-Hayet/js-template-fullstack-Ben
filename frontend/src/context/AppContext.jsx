@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { MDBAlert } from "mdb-react-ui-kit";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import axios from "axios";
 import ApiService from "../services/api.service";
 
 const appContext = createContext();
@@ -15,24 +14,38 @@ function AppContextProvider({ children, apiService }) {
   const [basicDanger, setBasicDanger] = useState(false);
   const navigate = useNavigate();
 
-  const login = async (credentials) => {
+  const logout = () => {
+    setUser(undefined);
+    setIsAdmin(false);
+    localStorage.clear();
+    return navigate("/demo");
+  };
+
+  const getProfile = async () => {
     try {
-      const data = await apiService.post(
-        `http://localhost:3310/login`,
-        credentials
-      );
-      localStorage.setItem("token", data.token);
-
-      apiService.setToken(data.token);
-
-      const result = await apiService.get("http://localhost:3310/users/me");
-
+      const result = await apiService.get("/users/me");
       alert(`Content de vous revoir ${result.data.email}`);
       setUser(result.data);
+      setIsAdmin(result.data.isAdmin === 1);
       if (result.data.isAdmin === 1) {
         return navigate("/admin/demo");
       }
       return navigate("/demo");
+    } catch (err) {
+      console.error(err.error ?? err.message);
+      logout();
+    }
+
+    return null;
+  };
+
+  const login = async (credentials) => {
+    try {
+      apiService.setToken(undefined);
+      const data = await apiService.post(`/login`, credentials);
+      localStorage.setItem("token", data.token);
+      apiService.setToken(data.token);
+      return await getProfile();
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -43,18 +56,13 @@ function AppContextProvider({ children, apiService }) {
 
   const register = async (newUser) => {
     try {
-      setUser(await axios.post("http://localhost:3310/users", newUser));
+      setUser(await apiService.post("/users", newUser));
       alert(`Bienvenue ${newUser.email}`);
+      return await login(newUser);
     } catch (err) {
       alert(err.message);
     }
-  };
-
-  const logout = () => {
-    setUser(undefined);
-    setIsAdmin(false);
-    localStorage.clear();
-    return navigate("/demo");
+    return null;
   };
 
   // exemple méthodes pour communiquer avec une api
@@ -69,7 +77,8 @@ function AppContextProvider({ children, apiService }) {
     }
 
     return navigate("/demo");
-  }, []);
+  }, [user, isAdmin]);
+
   return (
     <appContext.Provider value={contextData}>
       {children}

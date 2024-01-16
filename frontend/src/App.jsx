@@ -10,15 +10,21 @@ function App() {
       <Outlet />
       <h1>{user?.email ? "Connecté" : "Déconnecté"}</h1>
       <h2>{user?.isAdmin ? "admin" : "not admin"}</h2>
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
-      <Link to="/admin/demo">Admin</Link>
-      <Link to="/demo">Demo</Link>
-      {user?.email && (
-        <button type="button" onClick={logout}>
-          logout
-        </button>
-      )}
+      <Link to="/login" className="my-2">
+        Login
+      </Link>
+      <Link to="/register" className="my-2">
+        Register
+      </Link>
+      <Link to="/demo" className="my-2">
+        Demo
+      </Link>
+      <Link to="/admin/demo" className="my-2">
+        Admin
+      </Link>
+      <button type="button" className="my-2" onClick={logout}>
+        logout
+      </button>
     </div>
   );
 }

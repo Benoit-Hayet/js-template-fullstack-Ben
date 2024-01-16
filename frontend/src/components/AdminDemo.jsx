@@ -1,9 +1,6 @@
 import { MDBChart } from "mdb-react-ui-kit";
 
 export default function AdminDemo() {
-  // const adminContext = useAdmin();
-  // const appContext = useAppDemo();
-
   return (
     <MDBChart
       type="bar"

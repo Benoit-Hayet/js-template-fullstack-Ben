@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export default class ApiService {
+  #baseUrl = "http://localhost:3310";
+
   #token;
 
   constructor() {
@@ -28,11 +30,15 @@ export default class ApiService {
   }
 
   get(url) {
-    return axios.get(url, this.getConfig());
+    return axios.get(`${this.#baseUrl}${url}`, this.getConfig());
   }
 
   async post(url, content) {
-    const { data } = await axios.post(url, content, this.getConfig());
+    const { data } = await axios.post(
+      `${this.#baseUrl}${url}`,
+      content,
+      this.getConfig()
+    );
     return data;
   }
 }
