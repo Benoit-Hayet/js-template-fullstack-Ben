@@ -60,3 +60,9 @@ For deployment, you have to go to `secrets` → app `actions` on the github repo
 - rajouter un noeud un input de type file qui accepte uniquement les images.
 - rajouter un bouton submit.
 - ajouter la méthode handleSubmit (preventDefault()).
+
+### récupération des données du formulaire
+
+- récupération du State de l'input (L.5, L.18).
+- créer une instance de la classe FormData(permet d'envoyer les données à l'API) (L.9).
+- ajouter une image à l'instance FormData (L.10).

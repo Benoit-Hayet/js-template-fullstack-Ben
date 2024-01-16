@@ -1,13 +1,21 @@
 import { MDBChart } from "mdb-react-ui-kit";
+import { useState } from "react";
 
 export default function AdminDemo() {
+  const [file, setFile] = useState();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("avatar", file);
   };
   return (
     <>
       <form className="d-flex flex-column mb-5" onSubmit={handleSubmit}>
-        <input type="file" accept="image/*" />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
         <button type="submit">Envoyer le média</button>
       </form>
     <MDBChart
