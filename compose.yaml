@@ -1,0 +1,24 @@
+version: "3.4"
+
+services:
+  database:
+    image: mysql
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+    restart: always
+    environment:
+      - MYSQL_DATABASE=mvc_express
+      - MYSQL_ROOT_PASSWORD=helloworld
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-prootpassword"] # Command to check health.
+      interval: 5s # Interval between health checks.
+      timeout: 5s # Timeout for each health checking.
+      retries: 20 # Hou many times retries.
+      start_period: 10s
+
+volumes:
+  db_data:
