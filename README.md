@@ -66,3 +66,13 @@ For deployment, you have to go to `secrets` → app `actions` on the github repo
 - récupération du State de l'input (L.5, L.18).
 - créer une instance de la classe FormData(permet d'envoyer les données à l'API) (L.9).
 - ajouter une image à l'instance FormData (L.10).
+
+### envoyer l'image vers l'api
+
+- injection du service api dans le component
+- requete POST /uploads pour sauvegarder l'image
+- modifier la [methode]("./backend/src/models/upload.manager.js") de generation du path de l'image (l.11-13)
+- exporter la [methode setUser dans le contexte global]("./frontend/src/context/AppContext.jsx) (l.79 l.81)
+- [utilisation du retour de l'api pour mettre a jour les donnees de l'utilisateur]("./frontend/src/components/AdminDemo.jsx") (l.13)
+
+- [ajouter une balise image pour visualiser le resultat]("./frontend/src/App.jsx") (l.11)

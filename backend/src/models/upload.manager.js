@@ -8,10 +8,12 @@ class UploadManager extends AbstractManager {
   }
 
   create(data) {
-    const filename = `${data.path}.${data.originalname.split(".").slice(-1)}`;
+    let filename = data.destination.replace("public/", "");
+    filename += `${data.filename}.`;
+    filename += data.originalname.split(".").slice(-1);
 
     return new Promise((resolve, reject) => {
-      fs.rename(`${data.path}`, filename, async (err) => {
+      fs.rename(`${data.path}`, `public/${filename}`, async (err) => {
         if (err) {
           reject(err);
         }

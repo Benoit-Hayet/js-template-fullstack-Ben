@@ -8,6 +8,9 @@ function App() {
   return (
     <div className="container mt-5 d-flex flex-column">
       <Outlet />
+      {user?.avatar?.url && (
+        <img src={`http://localhost:3310/${user.avatar.url}`} alt="avatar" />
+      )}
       <h1>{user?.email ? "Connecté" : "Déconnecté"}</h1>
       <h2>{user?.isAdmin ? "admin" : "not admin"}</h2>
       <Link to="/login" className="my-2">

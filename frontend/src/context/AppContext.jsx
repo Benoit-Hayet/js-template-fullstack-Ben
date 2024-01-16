@@ -68,8 +68,17 @@ function AppContextProvider({ children, apiService }) {
   // exemple méthodes pour communiquer avec une api
 
   const contextData = useMemo(
-    () => ({ isAdmin, setIsAdmin, user, login, logout, register, apiService }),
-    [isAdmin, setIsAdmin, user, login, logout, register, apiService]
+    () => ({
+      isAdmin,
+      setIsAdmin,
+      user,
+      login,
+      logout,
+      register,
+      apiService,
+      setUser,
+    }),
+    [isAdmin, setIsAdmin, user, login, logout, register, apiService, setUser]
   );
   useEffect(() => {
     if (isAdmin) {
