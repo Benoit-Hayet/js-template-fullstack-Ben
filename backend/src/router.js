@@ -33,7 +33,12 @@ router.get(
 router.get("/users/me", authMiddleware, userControllers.getProfile);
 router.post("/users", validateUser, userControllers.postUser);
 router.post("/login", userControllers.postLogin);
-
+router.get(
+  "/admin/fixtures",
+  authMiddleware,
+  authAdminMiddleware,
+  userControllers.loadFixtures
+);
 // UPLOADS
 
 router.get(

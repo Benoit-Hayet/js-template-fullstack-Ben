@@ -1,9 +1,12 @@
-import { MDBChart } from "mdb-react-ui-kit";
-import { useState } from "react";
+import { MDBBtn, MDBChart, MDBSelect } from "mdb-react-ui-kit";
+import { useEffect, useState } from "react";
 import { useAppDemo } from "../context/AppContext";
 
 export default function AdminDemo() {
   const { apiService, setUser } = useAppDemo();
+  const [itemPerPage, setItemPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [users, setUsers] = useState([]);
   const [file, setFile] = useState();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,6 +15,15 @@ export default function AdminDemo() {
     const result = await apiService.post("/uploads", formData);
     setUser(result);
   };
+  const getPaginateUsers = async () => {
+    const result = await apiService.get(
+      `/users?page=${page}&itemperpage=${itemPerPage}`
+    );
+    setUsers(result.data);
+  };
+  useEffect(() => {
+    getPaginateUsers();
+  }, [page, itemPerPage]);
   return (
     <>
       <form className="d-flex flex-column mb-5" onSubmit={handleSubmit}>
@@ -56,6 +68,26 @@ export default function AdminDemo() {
             },
           ],
         }}
+      />
+      {users.map((user) => (
+        <span key={user.id}>
+          id: {user.id} email: {user.email}
+        </span>
+      ))}
+      <MDBBtn onClick={() => setPage(page <= 1 ? 1 : page - 1)}>
+        Précédent
+      </MDBBtn>
+      <span>{page}</span>
+      <MDBBtn onClick={() => setPage(page + 1)}>Suivant</MDBBtn>
+      <MDBSelect
+        onChange={(val) => {
+          setItemPerPage(val.value);
+        }}
+        data={[
+          { text: "2", value: 2 },
+          { text: "4", value: 4 },
+          { text: "50", value: 30 },
+        ]}
       />
     </>
   );

@@ -5,9 +5,11 @@ function generateAccessToken(data) {
   return jwt.sign(data, process.env.APP_SECRET, { expiresIn: "1800s" });
 }
 
-const getUsers = (_, res) => {
+const getUsers = (req, res) => {
+  const limit = Math.min(+(req.query.itemperpage ?? 10), 50);
+  const page = +req.query.page ?? 1;
   models.user
-    .findAll()
+    .findAll(limit, page)
     .then(([rows]) => {
       res.send(rows);
     })
@@ -61,6 +63,17 @@ const getUser = async (req, res) => {
     return res.status(422).send({ error: error.message });
   }
 };
+const loadFixtures = async (req, res) => {
+  for (let i = 0; i < 10000; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    await models.user.create({
+      email: `user-${i}@email.com`,
+      password: "1234",
+      is_admin: 0,
+    });
+  }
+  return res.sendStatus(204);
+};
 
 module.exports = {
   getUsers,
@@ -68,4 +81,5 @@ module.exports = {
   postLogin,
   getProfile,
   getUser,
+  loadFixtures,
 };

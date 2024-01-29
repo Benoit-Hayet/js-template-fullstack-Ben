@@ -9,8 +9,11 @@ class AbstractManager {
     ]);
   }
 
-  findAll() {
-    return this.database.query(`select * from  ${this.table}`);
+  findAll(limit, page) {
+    return this.database.query(
+      `select * from  ${this.table} limit ? offset ?`,
+      [limit, limit * page - limit]
+    );
   }
 
   delete(id) {
