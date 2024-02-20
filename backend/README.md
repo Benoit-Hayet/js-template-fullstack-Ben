@@ -41,3 +41,16 @@ An example (a basic list of items) is provided (you can load the _database.sql_ 
 - Item deletion: DELETE localhost:5000/items/:id
 
 You can find all these routes declared in the file `src/router.js`. You can add your own new routes, controllers and models.
+
+
+#Tests using jest and supertest [doc ici!](https://medium.com/@it.ermias.asmare/node-js-express-with-jest-and-supertest-e58aaf4c4514)
+
+1. install utilities `npm i jest supertest cross-env`
+2. create tests directory
+3. create userControllers  test file
+4. test user register
+   1. install [faker](https://www.npmjs.com/package/@faker-js/faker)
+   2. use faker for uniq email registration
+   3. test user register success
+   4. test user register fail with bad email
+   5. test unauthorized Get user collection
